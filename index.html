@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Açougue Prime Yunes — O seu novo padrão em carnes</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="produtos.css">
+		<script defer src="estilo.js"></script>
+		<script defer src="produtos.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+		<style>
+			/* Modern Reset & Variables */
+			:root {
+				--primary: #062642;
+				--secondary: #D6A945;
+				--text-main: #333333;
+				--text-light: #666666;
+				--bg-light: #f8f9fa;
+				--white: #ffffff;
+				--shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+				--shadow-md: 0 10px 30px rgba(0,0,0,0.08);
+				--radius: 12px;
+				--transition: all 0.3s ease;
+			}
+
+			* { box-sizing: border-box; margin: 0; padding: 0; }
+			html { scroll-behavior: smooth; }
+			body {
+				font-family: 'Montserrat', sans-serif;
+				color: var(--text-main);
+				background-color: var(--bg-light);
+				line-height: 1.6;
+				overflow-x: hidden;
+			}
+
+			/* Typography */
+			h1, h2, h3, h4 { font-family: 'Oswald', sans-serif; text-transform: uppercase; color: var(--primary); line-height: 1.2; }
+			h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+			h2 { font-size: 2rem; margin-bottom: 0.8rem; position: relative; display: inline-block; max-width: 100%; }
+			h2.text-center { display: block; }
+			h2::after { content: ''; display: block; width: 60px; height: 4px; background: var(--secondary); margin: 0.5rem auto 0; border-radius: 2px; }
+			.subtitle { font-size: 1.05rem; color: var(--text-light); margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; text-align: center; }
+
+			/* Layout Utilities */
+			.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+			.section { padding: 3.5rem 0; }
+			.section.alt { background-color: var(--white); }
+			.text-center { text-align: center; }
+
+			/* Header */
+			.site-header {
+				background: rgba(6, 38, 66, 0.95);
+				backdrop-filter: blur(10px);
+				padding: 1rem 0;
+				position: sticky;
+				top: 0;
+				z-index: 1000;
+				box-shadow: var(--shadow-sm);
+			}
+			.header-inner { display: flex; justify-content: space-between; align-items: center; }
+			.logo img { height: 50px; width: auto; }
+			.main-nav ul { display: flex; gap: 2rem; list-style: none; }
+			.main-nav a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: var(--transition); text-transform: uppercase; letter-spacing: 1px; }
+			.main-nav a:hover { color: var(--secondary); }
+			.header-actions { display: flex; align-items: center; gap: 1rem; }
+			.phone { color: var(--secondary); text-decoration: none; font-weight: 700; border: 1px solid var(--secondary); padding: 0.5rem 1rem; border-radius: 50px; transition: var(--transition); }
+			.phone:hover { background: var(--secondary); color: var(--primary); }
+			.menu-toggle { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; }
+
+			/* Hero */
+			.hero {
+				background: linear-gradient(135deg, rgba(6, 38, 66, 0.85) 0%, rgba(10, 59, 102, 0.75) 100%), url('img/img1.jpeg');
+				background-size: cover;
+				background-position: center;
+				background-attachment: fixed;
+				color: var(--white);
+				padding: 5rem 0 3.5rem;
+				position: relative;
+				overflow: hidden;
+			}
+			.hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; }
+			.hero-copy { text-shadow: 0 4px 12px rgba(0,0,0,0.8); }
+			.hero-copy h1 { color: var(--white); }
+			.hero-copy h1 .brand { color: var(--secondary); }
+			.hero-copy .lead { font-size: 1.1rem; margin-bottom: 1.5rem; opacity: 0.9; font-weight: 300; }
+			.cta { display: flex; gap: 1rem; margin-bottom: 2rem; }
+			.btn {
+				display: inline-block;
+				padding: 0.8rem 1.8rem;
+				border-radius: 50px;
+				text-decoration: none;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				transition: var(--transition);
+				border: 2px solid transparent;
+				cursor: pointer;
+				font-size: 0.9rem;
+			}
+			.btn.primary { background: var(--secondary); color: var(--primary); }
+			.btn.primary:hover { background: #e5b855; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(214, 169, 69, 0.4); }
+			.btn:not(.primary) { border-color: var(--white); color: var(--white); }
+			.btn:not(.primary):hover { background: var(--white); color: var(--primary); }
+			.btn.secondary { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+			.btn.secondary:hover { background: var(--primary); color: var(--white); }
+			.meta { list-style: none; font-size: 0.9rem; opacity: 0.8; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; }
+			.meta li { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+
+			/* Carousel in Hero */
+			.hero-media .carousel {
+				position: relative;
+				border-radius: var(--radius);
+				overflow: hidden;
+				box-shadow: var(--shadow-md);
+				aspect-ratio: 4/3;
+				transform: rotate(2deg);
+				border: 4px solid rgba(255,255,255,0.1);
+			}
+			.hero-media img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease; }
+			.hero-media img.active { opacity: 1; }
+
+			/* About */
+			.about-content { max-width: 800px; margin: 0 auto; text-align: center; }
+			#sobre .about-content p { font-size: 1.1rem; color: var(--text-light); margin-bottom: 1.5rem; }
+			#sobre h2 { color: var(--primary); text-shadow: none; }
+
+			/* Features */
+			.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+			.feature-card {
+				background: var(--white);
+				padding: 1.8rem;
+				border-radius: var(--radius);
+				box-shadow: var(--shadow-sm);
+				text-align: center;
+				transition: var(--transition);
+				border-bottom: 4px solid transparent;
+			}
+			.feature-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); border-bottom-color: var(--secondary); }
+			.feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+
+			/* Promo */
+			.promo-content { display: flex; flex-direction: column; gap: 2rem; background: var(--primary); border-radius: 20px; padding: 2rem; color: var(--white); overflow: hidden; position: relative; }
+			.promo-main { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; width: 100%; }
+			.promo-info h2 { color: var(--white); font-size: 2.5rem; }
+			.promo-info p { opacity: 0.9; margin-bottom: 1.5rem; }
+			
+			/* Promo Gallery (Carousel à direita) */
+			.promo-gallery { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); aspect-ratio: 1; }
+			.promo-gallery img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease; pointer-events: none; }
+			.promo-gallery img.active { opacity: 1; pointer-events: auto; cursor: zoom-in; }
+
+			/* Carousel Navigation */
+			.carousel-nav {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				background: rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(4px);
+				color: white;
+				border: none;
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				font-size: 1.2rem;
+				cursor: pointer;
+				z-index: 10;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: var(--transition);
+			}
+			.carousel-nav:hover { background: rgba(255, 255, 255, 0.4); transform: translateY(-50%) scale(1.1); }
+			.carousel-prev { left: 10px; }
+			.carousel-next { right: 10px; }
+			
+			/* Gallery */
+			.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+			.gallery-item { border-radius: var(--radius); overflow: hidden; cursor: pointer; aspect-ratio: 1; position: relative; box-shadow: var(--shadow-sm); }
+			.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+			.gallery-item:hover img { transform: scale(1.1); }
+			.gallery-item::after { content: '🔍'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; opacity: 0; transition: var(--transition); }
+			.gallery-item:hover::after { opacity: 1; }
+
+			/* Testimonials */
+			.testimonials-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+			.testimonial { background: var(--bg-light); padding: 2rem; border-radius: var(--radius); border-left: 4px solid var(--secondary); font-style: italic; position: relative; }
+			.testimonial cite { display: block; margin-top: 1rem; font-weight: 700; color: var(--primary); font-style: normal; text-align: right; }
+
+			/* Contact */
+			.contact-section { background: var(--white); }
+			.contact-inner { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; align-items: stretch; }
+			.contact-card { background: var(--primary); color: var(--white); padding: 1.8rem; border-radius: var(--radius); display: flex; flex-direction: column; }
+			.contact-card h2 { color: var(--white); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+			.contact-card p { margin-bottom: 0.8rem; display: flex; align-items: flex-start; gap: 0.8rem; font-size: 0.95rem; }
+			.map-wrap { margin-top: auto; border-radius: 8px; overflow: hidden; height: 250px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+			.map-wrap iframe { width: 100%; height: 100%; border: 0; }
+			.contact-form { display: flex; flex-direction: column; gap: 1rem; background: var(--bg-light); padding: 1.8rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+			.contact-form label { font-weight: 700; color: var(--primary); display: flex; flex-direction: column; gap: 0.5rem; }
+			.contact-form input, .contact-form textarea { padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; transition: var(--transition); }
+			.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(214, 169, 69, 0.2); }
+			.form-note { font-size: 0.8rem; color: var(--text-light); margin-top: 1rem; }
+
+			/* Footer */
+			.site-footer { background: #041a2f; color: #a0aec0; padding: 2.5rem 0 1.5rem; font-size: 0.9rem; }
+			.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+			.footer-logo { height: 40px; margin-bottom: 1rem; opacity: 0.8; }
+			.footer-links h4, .footer-contact h4, .footer-social h4 { color: var(--white); font-family: 'Oswald', sans-serif; font-size: 1.2rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+			.footer-links ul { list-style: none; }
+			.footer-links li { margin-bottom: 0.8rem; }
+			.footer-links a { color: #a0aec0; text-decoration: none; transition: var(--transition); }
+			.footer-links a:hover { color: var(--secondary); padding-left: 5px; }
+			.social-icons { display: flex; gap: 1rem; }
+			.social { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; transition: var(--transition); color: #fff; position: relative; overflow: hidden; }
+			.social:hover { background: var(--secondary); transform: translateY(-3px); color: var(--primary); box-shadow: 0 0 20px rgba(214, 169, 69, 0.6); }
+			.social::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); transition: none; }
+			.social:hover::after { left: 100%; transition: 0.4s ease; }
+			.footer-legal { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; grid-column: 1 / -1; }
+			.developer-credit {
+				font-size: 0.8rem;
+				opacity: 0.7;
+				margin-top: 0.5rem;
+			}
+			.developer-credit a {
+				color: inherit;
+				text-decoration: underline;
+				animation: pulse-link 5s infinite ease-in-out;
+			}
+			@keyframes pulse-link {
+				50% { color: var(--white); }
+			}
+			.back-to-top { position: fixed; bottom: 30px; right: 30px; background: var(--secondary); color: var(--primary); border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: var(--transition); z-index: 900; display: flex; align-items: center; justify-content: center; }
+			.back-to-top.visible { opacity: 1; visibility: visible; }
+			.back-to-top:hover { transform: translateY(-5px); background: #fff; }
+
+			/* Mobile Responsive */
+			@media (max-width: 900px) {
+				h1 { font-size: 2.5rem; }
+				.hero-inner, .contact-inner, .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+				.promo-main { grid-template-columns: 1fr; gap: 2rem; }
+				.main-nav { position: fixed; top: 70px; left: 0; width: 100%; background: var(--primary); padding: 2rem; transform: translateY(-150%); transition: var(--transition); box-shadow: var(--shadow-md); }
+				.main-nav.open { transform: translateY(0); }
+				.main-nav ul { flex-direction: column; align-items: center; gap: 1.5rem; }
+				.menu-toggle { display: block; }
+				.hero-media { order: -1; }
+				.promo-gallery { order: -1; }
+				.hero { background-attachment: scroll; }
+				
+				/* Disable typing animation on mobile to prevent text clipping */
+				.slogan {
+					width: auto !important;
+					border: none !important;
+					animation: none !important;
+					white-space: normal !important;
+				}
+			}
+
+			/* Scroll Animation */
+			.fade-in-section { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; will-change: opacity, transform; }
+			.fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+
+			/* Typing Animation */
+			.slogan {
+				display: inline-block;
+				overflow: hidden;
+				border-right: 3px solid var(--secondary);
+				white-space: nowrap;
+				width: 0;
+				color: var(--secondary);
+				font-weight: 700;
+				animation: typing 3.5s steps(40, end) forwards, blink-caret .75s step-end infinite;
+			}
+			@keyframes typing { from { width: 0 } to { width: 32ch } }
+			@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--secondary) } }
+
+			/* Lightbox */
+			.lightbox { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.85); visibility: hidden; opacity: 0; transition: opacity .2s; z-index: 2000; }
+			.lightbox[aria-hidden="false"] { visibility: visible; opacity: 1; }
+			.lightbox img { max-width: 90%; max-height: 85%; border-radius: 8px; }
+			.lightbox .close { position: absolute; top: 20px; right: 20px; background: transparent; border: 0; color: #fff; font-size: 24px; cursor: pointer; }
+
+			/* WhatsApp Auto Modal */
+			.wa-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+			.wa-modal-overlay.open { opacity: 1; pointer-events: auto; }
+			.wa-modal-content { background: #fff; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; text-align: center; position: relative; transform: translateY(20px); transition: transform 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+			.wa-modal-overlay.open .wa-modal-content { transform: translateY(0); }
+			.wa-icon { width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+			.wa-close { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #999; }
+			.full-width { width: 100%; display: block; text-align: center; margin-top: 1rem; }
+			.wa-modal-content .btn.primary { background-color: #25D366; color: white; animation: pulse-green 2s infinite; border: none; }
+			.wa-modal-content .btn.primary:hover { background-color: #128C7E; color: white; }
+			@keyframes pulse-green {
+				0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+				70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+				100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+			}
+
+			/* Cookie Banner */
+			.cookie-banner {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				background: rgba(6, 38, 66, 0.98);
+				color: var(--white);
+				padding: 1.5rem 2rem;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 2rem;
+				z-index: 9999;
+				transform: translateY(100%);
+				transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+				box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+				backdrop-filter: blur(10px);
+				border-top: 1px solid rgba(255,255,255,0.1);
+			}
+			.cookie-banner.show { transform: translateY(0); }
+			.cookie-banner p { margin: 0; font-size: 0.95rem; max-width: 800px; line-height: 1.5; }
+			.cookie-banner .btn { white-space: nowrap; padding: 0.6rem 1.5rem; font-size: 0.9rem; }
+			@media (max-width: 768px) {
+				.cookie-banner { flex-direction: column; text-align: center; gap: 1rem; padding: 1.5rem; }
+			}
+
+			/* Countdown Timer */
+			.countdown-container {
+				display: flex;
+				gap: 1rem;
+				margin: 1.5rem 0;
+				flex-wrap: wrap;
+			}
+			.countdown-item {
+				background: rgba(255,255,255,0.1);
+				padding: 0.8rem;
+				border-radius: 8px;
+				text-align: center;
+				min-width: 70px;
+				border: 1px solid rgba(255,255,255,0.2);
+			}
+			.countdown-number { display: block; font-size: 1.5rem; font-weight: 700; color: var(--secondary); line-height: 1; }
+			.countdown-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.8; }
+
+			/* Shine Effect */
+			.btn-shine { position: relative; overflow: hidden; }
+			.btn-shine::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: -150%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+				transform: skewX(-20deg);
+				animation: shine 5s infinite;
+				pointer-events: none;
+			}
+			@keyframes shine {
+				0% { left: -150%; }
+				15% { left: 150%; }
+				100% { left: 150%; }
+			}
+
+			/* Blog Section */
+			.blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+			.blog-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); transition: var(--transition); display: flex; flex-direction: column; }
+			.blog-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+			.blog-img { height: 200px; overflow: hidden; }
+			.blog-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+			.blog-card:hover .blog-img img { transform: scale(1.1); }
+			.blog-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+			.blog-date { font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem; display: block; }
+			.blog-card h3 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary); }
+			.blog-card p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 1.5rem; flex: 1; }
+			.blog-link { color: var(--secondary); text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; align-self: flex-start; }
+			.blog-link:hover { text-decoration: underline; }
+			.blog-actions { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+			.blog-share { display: flex; align-items: center; gap: 6px; color: #25D366; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: var(--transition); }
+			.blog-share:hover { color: #128C7E; transform: scale(1.05); }
+
+			/* Clube de Assinatura */
+			.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+			.pricing-card { background: var(--white); border-radius: var(--radius); padding: 1.8rem; box-shadow: var(--shadow-sm); text-align: center; border: 1px solid rgba(0,0,0,0.05); transition: var(--transition); position: relative; overflow: hidden; display: flex; flex-direction: column; }
+			.pricing-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); border-color: var(--secondary); }
+			.pricing-card.featured { border: 2px solid var(--secondary); transform: scale(1.05); z-index: 1; }
+			.pricing-card.featured:hover { transform: scale(1.08); }
+			.pricing-badge { position: absolute; top: 20px; right: -35px; background: var(--secondary); color: var(--primary); padding: 5px 40px; transform: rotate(45deg); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+			.pricing-title { font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem; }
+			.pricing-price { font-size: 2.2rem; font-weight: 700; color: var(--secondary); margin-bottom: 1.5rem; font-family: 'Oswald', sans-serif; }
+			.pricing-price span { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+			.pricing-features { list-style: none; margin-bottom: 2rem; text-align: left; flex: 1; }
+			.pricing-features li { margin-bottom: 0.8rem; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
+			.pricing-features li::before { content: '✓'; color: var(--secondary); font-weight: 700; }
+
+			/* Club Rules & Steps */
+			.club-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem; text-align: center; position: relative; }
+			.club-step { position: relative; padding: 1rem; }
+			.club-step-icon { width: 60px; height: 60px; background: var(--secondary); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 1.5rem; font-weight: 700; box-shadow: 0 4px 10px rgba(214, 169, 69, 0.3); }
+			.club-step h4 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary); }
+			.club-step p { font-size: 0.9rem; color: var(--text-light); line-height: 1.5; }
+			
+			.club-rules { background: var(--bg-light); padding: 2rem; border-radius: var(--radius); margin-top: 3rem; border-left: 5px solid var(--secondary); box-shadow: var(--shadow-sm); }
+			.club-rules h3 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--primary); }
+			.club-rules ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+			.club-rules li { position: relative; padding-left: 1.5rem; font-size: 0.95rem; color: var(--text-light); }
+			.club-rules li::before { content: '•'; color: var(--secondary); font-weight: bold; position: absolute; left: 0; font-size: 1.5rem; line-height: 1; top: -2px; }
+
+			/* Club Notification */
+			.club-notification {
+				background: #e53e3e;
+				color: #fff;
+				padding: 0.5rem 1.5rem;
+				border-radius: 50px;
+				font-weight: 700;
+				font-size: 0.85rem;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				display: inline-block;
+				margin-bottom: 1.5rem;
+				box-shadow: 0 4px 10px rgba(229, 62, 62, 0.3);
+				animation: pulse-red 2s infinite;
+			}
+			@keyframes pulse-red {
+				0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
+				70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+				100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+			}
+
+			/* WhatsApp FAB with Message */
+			.whatsapp-container {
+				position: fixed;
+				right: 18px;
+				bottom: 18px;
+				z-index: 999;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+			.whatsapp-fab {
+				position: relative;
+				width: 56px;
+				height: 56px;
+				background: #25D366;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 10px 30px rgba(0,0,0,.25);
+				z-index: 2;
+				transition: transform 0.3s ease;
+			}
+			.whatsapp-fab:hover { transform: scale(1.1); }
+			.whatsapp-message {
+				background: #fff;
+				color: var(--text-main);
+				padding: 8px 16px;
+				border-radius: 20px;
+				font-size: 0.9rem;
+				font-weight: 600;
+				box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+				white-space: nowrap;
+				opacity: 0;
+				animation: whatsapp-bubble 12s infinite ease-in-out;
+				animation-delay: 5s;
+				pointer-events: none;
+			}
+			@keyframes whatsapp-bubble {
+				0%, 100% { opacity: 0; transform: translateX(10px); }
+				8%, 40% { opacity: 1; transform: translateX(0); }
+				50% { opacity: 0; transform: translateX(10px); }
+			}
+
+			/* Blog Modal Responsive Fix */
+			@media (max-width: 768px) {
+				.modal-content { flex-direction: column; }
+				.modal-content img { width: 100%; height: 200px; }
+			}
+
+			/* Generic Modal Styles (for Blog & Waitlist) */
+			.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(5px); }
+			.modal.open { opacity: 1; pointer-events: auto; }
+			.modal .modal-content { background: #fff; padding: 2rem; border-radius: 16px; width: 90%; max-width: 900px; position: relative; transform: translateY(20px); transition: transform 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.2); display: flex; gap: 1.5rem; }
+			.modal.open .modal-content { transform: translateY(0); }
+			.modal-content img { width: 40%; object-fit: cover; border-radius: 8px; }
+			.modal-info { flex: 1; }
+			.modal-info h3 { margin-top: 0; font-size: 1.8rem; }
+			.modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+
+		</style>
+	</head>
+	<body>
+		<header class="site-header">
+			<div class="container header-inner">
+				<a class="logo" href="#home" aria-label="Açougue Prime Yunes">
+					<img src="img/logo.svg" alt="Prime Yunes Logo"/>
+				</a>
+
+				<nav class="main-nav" id="mainNav" aria-label="Menu principal">
+					<ul class="menu">
+						<li><a href="#home">Início</a></li>
+						<li><a href="#sobre">Sobre</a></li>
+						<li><a href="#promocoes">Promoções</a></li>
+						<li><a href="#blog">Blog</a></li>
+						<li><a href="#clube">Clube</a></li>
+						<li><a href="#contato">Contato</a></li>
+					</ul>
+				</nav>
+
+				<div class="header-actions">
+					<a class="phone btn-shine" href="https://pedidoacougueprimeyunes.ccmpedidoonline.com.br/index.php" target="_blank">Faça seu pedido</a>
+					<button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+				</div>
+			</div>
+		</header>
+
+		<main>
+			<!-- Hero / Capa interativa -->
+			<section id="home" class="hero">
+				<div class="container hero-inner">
+					<div class="hero-copy">
+						<h1>Açougue <span class="brand">Prime Yunes</span></h1>
+						<p class="slogan">O seu novo padrão em carnes</p>
+						<p class="lead">Cortes selecionados, atendimento dedicado e ofertas especiais para sua mesa.</p>
+						<div class="cta">
+							<a class="btn primary" href="#promocoes">Ver Ofertas</a>
+							<a class="btn" href="#contato">Fale Conosco</a>
+						</div>
+						<ul class="meta">
+							<li><strong>Endereço:</strong> Avenida Miguel Yunes, 351, loja 2</li>
+							<li><strong>Horário:</strong> Seg–Sáb 9:00–20:00 · Dom/feriados 9:00–15:00</li>
+						</ul>
+					</div>
+					<div class="hero-media">
+						<div class="carousel" id="carousel">
+							<img class="active" loading="lazy" src="img/img1.jpeg" alt="Cortes de carne 1">
+							<img loading="lazy" src="img/img2.jpeg" alt="Cortes de carne 2">
+							<img loading="lazy" src="img/img3.jpeg" alt="Cortes de carne 3">
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Sobre (Institucional) -->
+			<section id="sobre" class="section fade-in-section">
+				<div class="container">
+					<div class="about-content">
+						<h2>Nossa História</h2>
+						<p class="subtitle">Tradição e qualidade que você confia.</p>
+						<p>O <strong>Açougue Prime Yunes</strong> nasceu com o propósito de redefinir o conceito de carnes na região. Mais do que um açougue, somos uma casa de carnes dedicada a oferecer cortes selecionados com procedência garantida e um atendimento que faz você se sentir em casa.</p>
+						<p>Localizado na Avenida Miguel Yunes, nossa estrutura foi pensada para garantir a máxima higiene e conservação dos produtos. Nossa equipe de especialistas está sempre pronta para preparar o corte ideal para o seu churrasco, jantar ou dia a dia.</p>
+						<p><strong>Nossa Missão:</strong> Levar à mesa das famílias qualidade, sabor e saúde, através de um serviço honesto e dedicado.</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- Diferenciais -->
+			<section id="diferenciais" class="section alt fade-in-section">
+				<div class="container">
+					<h2 class="text-center">Por que escolher a Prime Yunes?</h2>
+					<div class="features-grid">
+						<div class="feature-card">
+							<h3>Qualidade Premium</h3>
+							<p>Trabalhamos exclusivamente com fornecedores certificados e gado selecionado para garantir maciez e sabor.</p>
+						</div>
+						<div class="feature-card">
+							<h3>Cortes Personalizados</h3>
+							<p>Limpamos, fatiamos e moemos a carne na hora, exatamente do jeito que você prefere.</p>
+						</div>
+						<div class="feature-card">
+							<h3>Higiene Total</h3>
+							<p>Seguimos rigorosos padrões sanitários para garantir a segurança alimentar da sua família.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Promoções (Nova Seção) -->
+			<section id="promocoes" class="section alt fade-in-section">
+				<div class="container">
+					<div class="promo-content">
+						<div class="promo-main">
+							<div class="promo-info">
+								<h2>Ofertas da Semana</h2>
+								<p class="subtitle">Qualidade Prime com preços imperdíveis.</p>
+								<p>Toda semana selecionamos os melhores cortes para você aproveitar. Acompanhe nossas redes sociais ou visite a loja para garantir essas ofertas por tempo limitado.</p>
+								<p><strong>Destaque:</strong> Picanha, Ancho e Kits para Churrasco.</p>
+								
+								<div class="countdown-container" id="promoCountdown">
+									<div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Dias</span></div>
+									<div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Horas</span></div>
+									<div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Min</span></div>
+									<div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
+								</div>
+
+								<a href="https://wa.me/5511988322130?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20oferta%20da%20semana." target="_blank" class="btn primary btn-shine">Faça seu Pedido</a>
+							</div>
+							<div class="promo-gallery carousel">
+								<img class="active" src="img/img3.jpeg" alt="Oferta Especial 1">
+								<img src="img/img1.jpeg" alt="Oferta Especial 2">
+								<img src="img/img2.jpeg" alt="Oferta Especial 3">
+								<img src="img/img1.jpeg" alt="Oferta Especial 4">
+								<button class="carousel-nav carousel-prev" aria-label="Anterior">❮</button>
+								<button class="carousel-nav carousel-next" aria-label="Próximo">❯</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Galeria (Ambiente) -->
+			<section id="galeria" class="section fade-in-section">
+				<div class="container">
+					<h2>Conheça Nossa Loja</h2>
+					<p class="subtitle">Um ambiente limpo, moderno e acolhedor esperando por você.</p>
+					<div class="gallery-grid" id="gallery">
+						<div class="gallery-item">
+							<img src="img/img1.jpeg" alt="Fachada da loja" loading="lazy">
+						</div>
+						<div class="gallery-item">
+							<img src="img/img2.jpeg" alt="Balcão de carnes" loading="lazy">
+						</div>
+						<div class="gallery-item">
+							<img src="img/img3.jpeg" alt="Área de atendimento" loading="lazy">
+						</div>
+						<div class="gallery-item">
+							<img src="img/img1.jpeg" alt="Equipe preparada" loading="lazy">
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Blog / Dicas -->
+			<section id="blog" class="section alt fade-in-section">
+				<div class="container">
+					<h2 class="text-center">Dicas do Mestre</h2>
+					<p class="subtitle">Segredos e técnicas para elevar o nível do seu churrasco.</p>
+					<div class="blog-grid">
+						<article class="blog-card">
+							<div class="blog-img">
+								<img src="img/img1.jpeg" alt="Picanha na grelha" loading="lazy">
+							</div>
+							<div class="blog-content">
+								<span class="blog-date">Dica #01</span>
+								<h3>Os Segredos da Picanha</h3>
+								<p>Aprenda a escolher a peça ideal, como selar a gordura e o ponto certo para garantir suculência máxima.</p>
+								<div class="blog-actions">
+									<a href="#" class="blog-link" data-title="Os Segredos da Picanha" data-img="img/img1.jpeg" data-content="Para preparar uma picanha inesquecível, o segredo começa na escolha da peça: procure por uma capa de gordura uniforme e carne com coloração vermelho-vivo. Na grelha, comece selando a gordura para garantir que o sabor se espalhe pela carne. Evite virar muitas vezes; o ideal é virar apenas uma vez para manter os sucos internos. O ponto clássico é rosado no centro. Para temperar, o sal grosso ou flor de sal aplicado momentos antes de ir ao fogo (ou depois de fatiar) é o suficiente para realçar o sabor natural.">Ler Mais</a>
+									<a href="https://api.whatsapp.com/send?text=Dica%20do%20Prime%20Yunes%3A%20Os%20Segredos%20da%20Picanha%20%E2%80%94%20Aprenda%20a%20escolher%20a%20pe%C3%A7a%20ideal%20para%20garantir%20sucul%C3%AAncia%20m%C3%A1xima." target="_blank" class="blog-share" aria-label="Compartilhar no WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Compartilhar</a>
+								</div>
+							</div>
+						</article>
+						<article class="blog-card">
+							<div class="blog-img">
+								<img src="img/img2.jpeg" alt="Carvão em brasa" loading="lazy">
+							</div>
+							<div class="blog-content">
+								<span class="blog-date">Dica #02</span>
+								<h3>Carvão ou Lenha?</h3>
+								<p>Descubra como o tipo de combustível influencia no sabor defumado e na temperatura da sua churrasqueira.</p>
+								<div class="blog-actions">
+									<a href="#" class="blog-link" data-title="Carvão ou Lenha?" data-img="img/img2.jpeg" data-content="A escolha entre carvão e lenha define a personalidade do seu churrasco. O carvão é prático, acende rápido e mantém o calor constante, sendo ideal para o dia a dia. Já a lenha (como laranjeira, eucalipto ou macieira) proporciona um aroma defumado complexo e inigualável, perfeito para assados de longa duração como costelas e briskets. Se optar pela lenha, lembre-se: espere a fumaça branca inicial passar e cozinhe apenas sobre a brasa vermelha para evitar o gosto amargo na carne.">Ler Mais</a>
+									<a href="https://api.whatsapp.com/send?text=Dica%20do%20Prime%20Yunes%3A%20Carv%C3%A3o%20ou%20Lenha%3F%20%E2%80%94%20Descubra%20como%20o%20tipo%20de%20combust%C3%ADvel%20influencia%20no%20sabor%20defumado." target="_blank" class="blog-share" aria-label="Compartilhar no WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Compartilhar</a>
+								</div>
+							</div>
+						</article>
+						<article class="blog-card">
+							<div class="blog-img">
+								<img src="img/img3.jpeg" alt="Tempero de carnes" loading="lazy">
+							</div>
+							<div class="blog-content">
+								<span class="blog-date">Dica #03</span>
+								<h3>Marinada Perfeita</h3>
+								<p>Ervas, especiarias e o tempo certo de descanso para transformar cortes simples em pratos gourmet.</p>
+								<div class="blog-actions">
+									<a href="#" class="blog-link" data-title="Marinada Perfeita" data-img="img/img3.jpeg" data-content="Uma marinada equilibrada transforma cortes simples em experiências gourmet. A fórmula básica consiste em três pilares: uma gordura (como azeite ou óleo) para conduzir o sabor, um ácido (vinagre, limão, vinho ou iogurte) para amaciar as fibras, e aromáticos (ervas frescas, alho, cebola, pimentas) para dar personalidade. Para carnes vermelhas, vinho tinto, alecrim e alho são clássicos. Para aves, limão, sálvia e mostarda funcionam perfeitamente. O tempo é crucial: deixe marinar por pelo menos 4 horas na geladeira.">Ler Mais</a>
+									<a href="https://api.whatsapp.com/send?text=Dica%20do%20Prime%20Yunes%3A%20Marinada%20Perfeita%20%E2%80%94%20Ervas%2C%20especiarias%20e%20o%20tempo%20certo%20de%20descanso%20para%20transformar%20cortes%20simples." target="_blank" class="blog-share" aria-label="Compartilhar no WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Compartilhar</a>
+								</div>
+							</div>
+						</article>
+					</div>
+				</div>
+			</section>
+
+			<!-- Clube de Assinatura -->
+			<section id="clube" class="section fade-in-section">
+				<div class="container">
+					<div class="text-center">
+						<span class="club-notification">Vagas Limitadas para Novos Membros</span>
+					</div>
+					<h2 class="text-center">Clube Prime</h2>
+					<p class="subtitle">Receba mensalmente uma seleção exclusiva dos nossos melhores cortes.</p>
+					
+					<!-- Como Funciona -->
+					<div class="club-steps">
+						<div class="club-step">
+							<div class="club-step-icon">1</div>
+							<h4>Escolha seu Plano</h4>
+							<p>Defina a opção ideal para o consumo da sua família.</p>
+						</div>
+						<div class="club-step">
+							<div class="club-step-icon">2</div>
+							<h4>Seleção Fresca</h4>
+							<p>Nossos especialistas separam os melhores cortes do dia.</p>
+						</div>
+						<div class="club-step">
+							<div class="club-step-icon">3</div>
+							<h4>Entrega Grátis</h4>
+							<p>Receba em casa com conforto e segurança na data agendada.</p>
+						</div>
+						<div class="club-step">
+							<div class="club-step-icon">4</div>
+							<h4>Sem Fidelidade</h4>
+							<p>Pause ou cancele quando quiser, sem multas ou burocracia.</p>
+						</div>
+					</div>
+
+					<div class="pricing-grid">
+						<div class="pricing-card">
+							<h3 class="pricing-title">Iniciante</h3>
+							<div class="pricing-price">R$ 199<span>/mês</span></div>
+							<ul class="pricing-features">
+								<li>3kg de Carnes Selecionadas</li>
+								<li>Cortes para o Dia a Dia</li>
+								<li>Dicas de Preparo</li>
+								<li>Frete Grátis (Região)</li>
+							</ul>
+							<a href="https://wa.me/5511988322130?text=Quero%20assinar%20o%20plano%20Iniciante" target="_blank" class="btn">Assinar</a>
+						</div>
+						<div class="pricing-card featured">
+							<div class="pricing-badge">Popular</div>
+							<h3 class="pricing-title">Churrasqueiro</h3>
+							<div class="pricing-price">R$ 349<span>/mês</span></div>
+							<ul class="pricing-features">
+								<li>5kg de Cortes Nobres</li>
+								<li>Picanha, Ancho e Chorizo</li>
+								<li>Carvão e Sal de Parrilla</li>
+								<li>Acesso Antecipado a Ofertas</li>
+							</ul>
+							<a href="https://wa.me/5511988322130?text=Quero%20assinar%20o%20plano%20Churrasqueiro" target="_blank" class="btn primary">Assinar</a>
+						</div>
+						<div class="pricing-card">
+							<h3 class="pricing-title">Master</h3>
+							<div class="pricing-price">R$ 599<span>/mês</span></div>
+							<ul class="pricing-features">
+								<li>8kg de Cortes Premium</li>
+								<li>Linha Black Angus</li>
+								<li>Kit de Temperos Exclusivos</li>
+								<li>Consultoria com Açougueiro</li>
+							</ul>
+							<a href="https://wa.me/5511988322130?text=Quero%20assinar%20o%20plano%20Master" target="_blank" class="btn">Assinar</a>
+						</div>
+					</div>
+
+					<!-- Regras -->
+					<div class="club-rules">
+						<h3>Regras e Funcionamento</h3>
+						<ul>
+							<li><strong>Pagamento:</strong> Cobrança mensal recorrente via cartão ou PIX.</li>
+							<li><strong>Entregas:</strong> Realizadas na primeira semana do mês ou data combinada.</li>
+							<li><strong>Trocas:</strong> Solicite substituição de cortes com 48h de antecedência.</li>
+							<li><strong>Área de Cobertura:</strong> Consulte seu CEP para validar o frete grátis.</li>
+							<li><strong>Cancelamento:</strong> Pode ser feito a qualquer momento pelo WhatsApp.</li>
+						</ul>
+					</div>
+
+					<!-- Lista de Espera CTA -->
+					<div class="text-center" style="margin-top: 3rem;">
+						<p style="margin-bottom: 1rem; color: var(--text-light);">As vagas para o Clube Prime são limitadas. Se não conseguir assinar agora, garanta seu lugar na próxima abertura.</p>
+						<button id="openWaitlist" class="btn secondary">Entrar na Lista de Espera</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- Comentários de clientes -->
+			<section id="testemunhos" class="section alt testimonials fade-in-section">
+				<div class="container">
+					<h2 class="text-center">O que nossos clientes dizem</h2>
+					<div class="testimonials-list">
+						<blockquote class="testimonial">"Melhores cortes da região — carne macia e atendimento ótimo." <cite>— Maria</cite></blockquote>
+						<blockquote class="testimonial">"Sempre que tem promoção eu aproveito. Recomendo!" <cite>— João</cite></blockquote>
+						<blockquote class="testimonial">"Encomendei um combo para a festa e todo mundo elogiou." <cite>— Ana</cite></blockquote>
+					</div>
+				</div>
+			</section>
+
+			<!-- Contato (já existente) -->
+			<section id="contato" class="section contact-section fade-in-section">
+				<div class="container contact-inner">
+					<div class="contact-card">
+						<h2>Contato</h2>
+						<p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> <span><strong>Endereço:</strong><br>Avenida Miguel Yunes, 351, loja 2</span></p>
+						<p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> <span><strong>Telefone:</strong><br>(11) 98832-2130</span></p>
+						<p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> <span><strong>Email:</strong><br>acougueprimeyunes@gmail.com</span></p>
+						<p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12,6 12,12 16,14"></polyline></svg> <span><strong>Horário:</strong><br>Seg–Sáb 9:00–20:00<br>Dom/feriados 9:00–15:00</span></p>
+						<div class="map-wrap">
+							<iframe title="Mapa Açougue Prime Yunes" src="https://www.google.com/maps?q=Avenida+Miguel+Yunes+351+loja+2&output=embed" loading="lazy" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"></iframe>
+						</div>
+					</div>
+					<form id="contactForm" class="contact-form" action="https://formsubmit.co/acougueprimeyunes@gmail.com" method="POST">
+						<!-- To enable real email delivery replace contato@primeyunes.com above with your desired email. FormSubmit will send submissions there and requires a one-time email confirmation. -->
+						<input type="hidden" name="_subject" value="Novo contato pelo site - Prime Yunes">
+						<input type="hidden" name="_captcha" value="false">
+						<input type="hidden" name="_next" value="/">
+						<label>Nome<input type="text" name="nome" required></label>
+						<label>Telefone<input type="tel" name="telefone"></label>
+						<label>Mensagem<textarea name="mensagem" rows="5" required></textarea></label>
+						<button class="btn primary" type="submit">Enviar</button>
+						<p class="form-note">*Seus dados serão enviados por e-mail e WhatsApp.</p>
+					</form>
+				</div>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="container footer-inner footer-grid">
+				<div class="footer-about">
+					<img src="img/logo.svg" alt="Logo" class="footer-logo">
+					<p>Açougue Prime Yunes — O seu novo padrão em carnes. Cortes selecionados, atendimento dedicado e produtos frescos todos os dias.</p>
+				</div>
+				<div class="footer-links">
+					<h4>Links Rápidos</h4>
+					<ul>
+						<li><a href="#home">Início</a></li>
+						<li><a href="#sobre">Sobre</a></li>
+						<li><a href="#promocoes">Promoções</a></li>
+						<li><a href="#blog">Blog</a></li>
+						<li><a href="#clube">Clube</a></li>
+						<li><a href="#contato">Contato</a></li>
+					</ul>
+				</div>
+				<div class="footer-contact">
+					<h4>Contato</h4>
+					<p><strong>Endereço:</strong> Avenida Miguel Yunes, 351, loja 2</p>
+					<p><strong>Telefone:</strong> (11) 98832-2130</p>
+					<p><strong>Email:</strong> acougueprimeyunes@gmail.com</p>
+				</div>
+				<div class="footer-social">
+					<h4>Siga-nos</h4>
+					<div class="social-icons">
+						<a href="https://www.instagram.com/acougueprimeyunes/" target="_blank" aria-label="Instagram" class="social"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+						<a href="#" aria-label="Facebook" class="social"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+						<a href="https://wa.me/5511988322130" aria-label="WhatsApp" class="social"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.506-.669-.514-.172-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg></a>
+						</div>
+				</div>
+				<div class="footer-legal">
+					<p>© <span id="year"></span> Açougue Prime Yunes — Todos os direitos reservados.</p>
+					<p class="developer-credit">Desenvolvido por <a href="https://www.linkedin.com/in/jerônimo-lima-a55498253/" target="_blank">Jerônimo Lima</a></p>
+				</div>
+			</div>
+
+			</footer>
+
+		<!-- WhatsApp floating button -->
+		<div class="whatsapp-container">
+			<span class="whatsapp-message">Online agora!</span>
+			<a class="whatsapp-fab" href="https://wa.me/5511988322130" target="_blank" rel="noopener" aria-label="Abrir WhatsApp">
+				<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.506-.669-.514-.172-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+			</a>
+		</div>
+
+		<!-- Lightbox (gallery placeholder) -->
+		<div id="lightbox" class="lightbox" aria-hidden="true">
+			<button class="close" id="lightboxClose" aria-label="Fechar">✕</button>
+			<img id="lightboxImg" src="" alt="">
+		</div>
+
+		<!-- WhatsApp Auto Modal -->
+		<div id="whatsappModal" class="wa-modal-overlay" aria-hidden="true">
+			<div class="wa-modal-content">
+				<button id="closeWaModal" class="wa-close" aria-label="Fechar">✕</button>
+				<div class="wa-icon">
+					<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.1a9 9 0 10-2.6 6.1L21 22l-2.1-1.1A8.9 8.9 0 0021 12.1z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				</div>
+				<h3>Olá! Posso ajudar?</h3>
+				<p>Fale diretamente com nosso açougueiro e garanta os melhores cortes de hoje!</p>
+				<a href="https://wa.me/5511988322130" target="_blank" class="btn primary full-width">Chamar no WhatsApp</a>
+			</div>
+		</div>
+
+		<!-- Cookie Banner -->
+		<div id="cookieBanner" class="cookie-banner" aria-hidden="true">
+			<p>Utilizamos cookies para garantir que você tenha a melhor experiência em nosso site. Ao continuar navegando, você concorda com o uso de cookies.</p>
+			<button id="acceptCookies" class="btn primary">Aceitar e Fechar</button>
+		</div>
+
+		<!-- Blog Modal -->
+		<div id="blogModal" class="modal" aria-hidden="true">
+			<div class="modal-content">
+				<button class="modal-close" id="closeBlogModal" aria-label="Fechar">✕</button>
+				<img id="blogModalImg" src="" alt="">
+				<div class="modal-info">
+					<h3 id="blogModalTitle"></h3>
+					<p id="blogModalText" style="line-height: 1.6; color: #555;"></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Waitlist Modal -->
+		<div id="waitlistModal" class="modal" aria-hidden="true">
+			<div class="modal-content" style="max-width: 500px; flex-direction: column;">
+				<button class="modal-close" id="closeWaitlistModal" aria-label="Fechar">✕</button>
+				<h3 style="text-align: center; margin-bottom: 1rem;">Lista de Espera</h3>
+				<p style="text-align: center; margin-bottom: 1.5rem; color: #666; font-size: 0.95rem;">Preencha seus dados e avisaremos com prioridade assim que novas vagas surgirem.</p>
+				<form class="contact-form" action="https://formsubmit.co/acougueprimeyunes@gmail.com" method="POST" style="box-shadow: none; padding: 0; background: transparent;">
+					<input type="hidden" name="_subject" value="Nova inscrição na Lista de Espera - Clube Prime">
+					<input type="hidden" name="_captcha" value="false">
+					<input type="hidden" name="_next" value="/">
+					<label>Nome Completo<input type="text" name="nome" required></label>
+					<label>Email<input type="email" name="email" required></label>
+					<label>WhatsApp<input type="tel" name="telefone" required></label>
+					<label>Plano de Interesse
+						<select name="plano_interesse">
+							<option value="Qualquer">Qualquer</option>
+							<option value="Iniciante">Iniciante</option>
+							<option value="Churrasqueiro">Churrasqueiro</option>
+							<option value="Master">Master</option>
+						</select>
+					</label>
+					<button class="btn primary" type="submit" style="margin-top: 1rem;">Entrar na Lista</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
